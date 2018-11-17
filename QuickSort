@@ -1,0 +1,96 @@
+/********************************************************
+File name:QuickSort
+Author:Dickens.L.
+Date:2018/11/07
+Description:对输入的数进行快速排序
+Function List:手动分配数组大小，并对输入的数进行快速排序
+********************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// 快速排序函数
+void quicksort(int array[], int maxlen, int begin, int end)
+{
+	int i, j;
+	int temp = 0;
+
+	if (begin < end)
+	{
+		i = begin + 1;  // 将array[begin]作为基准数，因此从array[begin+1]开始与基准数比较
+		j = end;        // array[end]是数组的最后一位
+
+		while (i < j)
+		{
+			if (array[i] > array[begin])  // 如果比较的数组元素大于基准数，则交换位置
+			{
+				temp = array[j];
+				array[j] = array[i];
+				array[i] = temp;  // 交换两个数
+				j--;
+			}
+			else
+			{
+				i++;  // 将数组向后移一位，继续与基准数比较
+			}
+		}
+
+		if (array[i] >= array[begin])
+		{
+			i--;
+		}
+
+		temp = array[i];
+		array[i] = array[begin];
+		array[begin] = temp;  // 交换array[i]与array[begin]，把基准数移到中间
+
+		// 开始对基准数两边递归调用
+		quicksort(array, maxlen, begin, i);
+		quicksort(array, maxlen, j, end);
+	}
+}
+
+void main()
+{
+	int arrLen;  // 数组长度
+	int *array = NULL;  // 数组指针
+	int i;  // 数组下标
+	int x = 0;  // 数组中每个数字
+
+	printf("请输入数组长度：");
+	scanf("%d", &arrLen);
+
+	// 动态分配内存空间，如果失败就退出程序
+	array = (int*)malloc(arrLen * sizeof(int));
+	if (array == NULL) {
+		printf("创建数组失败！\n");
+		exit(0);
+	}
+	else // 动态分配内存空间成功
+	{
+		printf("请输入数字：");  // 准备向内存中写入数据
+		for ( i = 0; i < arrLen; i++)
+		{
+			scanf("%d", &array[i]);
+		}
+	}
+
+	// 循环输出数组元素
+	printf("将进行快排的数字是：\n");
+	for (i = 0; i < arrLen; i++) {
+		printf("%d\t", array[i]);
+	}
+	printf("\n");
+
+	// 开始排序
+	quicksort(array, arrLen, 0, arrLen - 1);  // 调用快速排序函数
+	
+	// 循环输出数组元素
+	printf("排序完成的数列是：\n");
+	for (i = 0; i < arrLen; i++) {
+		printf("%d\t", array[i]);
+	}
+
+	system("pause");
+	free(array);  // 释放内存
+}
